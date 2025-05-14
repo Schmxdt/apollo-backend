@@ -1,14 +1,25 @@
 {
   "compilerOptions": {
-    "target": "ES2020",
-    "module": "CommonJS",
-    "rootDir": "./src",
+    "target": "es6",
+    "module": "commonjs",
+    "baseUrl": "./src",
     "outDir": "./dist",
-    "strict": true,
+    "paths": {
+      "@assets/*": ["assets/*"],
+      "@modules/*": ["modules/*"],
+      "@config/*": ["config/*"],
+      "@shared/*": ["shared/*"],
+      "@errors/*": ["errors/*"],
+      "@utils/*": ["utils/*"]
+    },
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "resolveJsonModule": true,
-    "skipLibCheck": true
-  }
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "./src"
+  ]
 }
