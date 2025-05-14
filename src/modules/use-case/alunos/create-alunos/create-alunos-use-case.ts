@@ -1,7 +1,7 @@
 import { inject, injectable } from 'tsyringe'; 
 import { IAlunoDTO } from '@modules/dtos/i-aluno-dto';
 import { Alunos } from '@modules/infra/typeorm/entities/alunos';
-import { IAlunosRepository } from '@modules/repositories/i-aluno-repository';
+import { IAlunosRepository } from '@modules/repositories/i-alunos-repository';
 
 @injectable()
 export class CreateAlunosUseCase {

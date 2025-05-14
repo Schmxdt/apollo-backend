@@ -10,8 +10,8 @@ export class CreateAlunosController {
     const createAlunosUseCase = container.resolve(CreateAlunosUseCase);
 
     const result = await createAlunosUseCase.execute({ nome, email, data_nascimento })
-      .then(lmsResult => {
-        return ok(lmsResult)
+      .then(alunosResult => {
+        return ok(alunosResult)
       })
       .catch(error => {
         return error
