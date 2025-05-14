@@ -2,11 +2,15 @@ import { Repository } from 'typeorm';
 import { AppDataSource } from '@shared/infra/data-source';
 import { serverError } from '@shared/helpers/http';
 import { IMatriculasRepository } from '@modules/repositories/i-matriculas-repository';
-import { Matriculas } from '../entities/matriculas'; 
+import { Matriculas } from '../entities/matriculas';
 import { IMatriculaDTO } from '@modules/dtos/i-matricula-dto';
+import { Cursos } from '../entities/cursos';
+import { Alunos } from '../entities/alunos';
 
 export class MatriculasRepository implements IMatriculasRepository {
   private repository: Repository<Matriculas>;
+  private cursosRepository: Repository<Cursos>;
+  private alunosRepository: Repository<Alunos>;
 
   constructor() {
     this.repository = AppDataSource.getRepository(Matriculas);
@@ -136,6 +140,47 @@ export class MatriculasRepository implements IMatriculasRepository {
         .getRawOne();
 
       return count;
+    } catch (err) {
+      throw serverError(err);
+    }
+  }
+
+  // Aluno x Curso
+  async getAlunosByCurso(curso_id: string): Promise<any[]> {
+    try {
+      const result = await this.repository
+        .createQueryBuilder('matricula')
+        .leftJoin('matricula.aluno', 'aluno')
+        .select([
+          'aluno.id AS id',
+          'aluno.nome AS nome',
+          'aluno.email AS email',
+          'matricula.data_matricula AS data_matricula',
+        ])
+        .where('matricula.curso_id = :curso_id', { curso_id })
+        .getRawMany();
+
+      return result;
+    } catch (err) {
+      throw serverError(err);
+    }
+  }
+
+  // Curso x Aluno
+  async getCursosByAluno(aluno_id: string): Promise<Matriculas[]> {
+    try {
+      const result = await this.repository
+        .createQueryBuilder('matricula')
+        .leftJoin('matricula.curso', 'curso')
+        .select([
+          'curso.id AS id',
+          'curso.nome AS nome',
+          'curso.descricao AS descricao',
+        ])
+        .where('matricula.aluno_id = :aluno_id', { aluno_id })
+        .getRawMany();
+
+      return result;
     } catch (err) {
       throw serverError(err);
     }

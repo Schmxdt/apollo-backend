@@ -14,6 +14,10 @@ export interface IMatriculasRepository {
 
   get(id: string): Promise<Matriculas>
 
+  getAlunosByCurso(curso_id: string): Promise<Matriculas[]>
+
+  getCursosByAluno(aluno_id: string): Promise<Matriculas[]>
+
   update(data: IMatriculaDTO): Promise<Matriculas>
 
   delete(id: string): Promise<void>
