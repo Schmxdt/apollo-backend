@@ -1,4 +1,4 @@
-export interface IAlunoDTO {
+export interface ICursoDTO {
   id?: string;
   nome?: string;
   descricao?: string;

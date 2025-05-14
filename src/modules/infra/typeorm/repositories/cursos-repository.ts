@@ -1,29 +1,27 @@
 import { Repository } from 'typeorm';
 import { AppDataSource } from '@shared/infra/data-source';
 import { serverError } from '@shared/helpers/http';
-import { IAlunosRepository } from '@modules/repositories/i-alunos-repository';
-import { Alunos } from '../entities/alunos';
-import { IAlunoDTO } from '@modules/dtos/i-aluno-dto';
+import { ICursosRepository } from '@modules/repositories/i-cursos-repository';
+import { Cursos } from '../entities/cursos';
+import { ICursoDTO } from '@modules/dtos/i-cursos-dto';
 
-export class AlunosRepository implements IAlunosRepository {
-  private repository: Repository<Alunos>;
+export class CursosRepository implements ICursosRepository {
+  private repository: Repository<Cursos>;
 
   constructor() {
-    this.repository = AppDataSource.getRepository(Alunos);
+    this.repository = AppDataSource.getRepository(Cursos);
   }
 
   // Create
   async create({
     nome,
-    email,
-    data_nascimento,
-  }: IAlunoDTO): Promise<Alunos> {
+    descricao,
+  }: ICursoDTO): Promise<Cursos> {
     try {
 
       const result = this.repository.create({
         nome,
-        email,
-        data_nascimento,
+        descricao
       });
 
       await this.repository.save(result);
@@ -31,8 +29,8 @@ export class AlunosRepository implements IAlunosRepository {
       return result;
     }
     catch (error) {
-      console.error('Error creating Alunos:', error);
-      throw new Error('Error creating Alunos');
+      console.error('Error creating Cursos:', error);
+      throw new Error('Error creating Cursos');
     }
   }
 
@@ -42,7 +40,7 @@ export class AlunosRepository implements IAlunosRepository {
     page: number,
     rowsPerPage: number,
     columnOrder: Array<'ASC' | 'DESC'>
-  ): Promise<Alunos[]> {
+  ): Promise<Cursos[]> {
     try {
       if (typeof columnOrder === 'undefined' || columnOrder.length === 0) {
         columnOrder = ['ASC', 'ASC'];
@@ -50,17 +48,16 @@ export class AlunosRepository implements IAlunosRepository {
 
       const offset = rowsPerPage * page;
 
-      let result = await this.repository.createQueryBuilder('alunos')
+      let result = await this.repository.createQueryBuilder('cursos')
         .select([
-          'alunos.id as "id"',
-          'alunos.nome as "nome"',
-          'alunos.email as "email"',
-          'alunos.data_nascimento as "data_nascimento"',
+          'cursos.id as "id"',
+          'cursos.nome as "nome"',
+          'cursos.descricao as "descricao"',
         ])
-        .andWhere('CONVERT(alunos.nome USING utf8) LIKE :search', { search: `%${search}%` })
-        .addOrderBy('alunos.nome', 'DESC')
-        .addOrderBy('alunos.updated_at', 'ASC')
-        .addOrderBy('alunos.nome', columnOrder[0])
+        .andWhere('CONVERT(cursos.nome USING utf8) LIKE :search', { search: `%${search}%` })
+        .addOrderBy('cursos.nome', 'DESC')
+        .addOrderBy('cursos.updated_at', 'ASC')
+        .addOrderBy('cursos.nome', columnOrder[0])
         .offset(offset)
         .limit(rowsPerPage)
         .take(rowsPerPage)
@@ -73,14 +70,14 @@ export class AlunosRepository implements IAlunosRepository {
   }
 
   // // Get
-  async get(id: string): Promise<Alunos> {
+  async get(id: string): Promise<Cursos> {
     try {
       const result = await this.repository.findOne({
         where: { id },
       });
 
       if (!result) {
-        throw new Error('Alunos not found');
+        throw new Error('Cursos not found');
       }
 
       return result;
@@ -93,19 +90,17 @@ export class AlunosRepository implements IAlunosRepository {
   async update({
     id,
     nome,
-    email,
-    data_nascimento,
-  }: IAlunoDTO): Promise<Alunos> {
+    descricao,
+  }: ICursoDTO): Promise<Cursos> {
     try {
       const result = await this.repository.findOne({ where: { id } });
 
       if (!result) {
-        throw new Error('Alunos not found');
+        throw new Error('Cursos not found');
       }
 
       result.nome = nome;
-      result.email = email;
-      result.data_nascimento = data_nascimento;
+      result.descricao = descricao;
 
       await this.repository.save(result);
 
@@ -121,7 +116,7 @@ export class AlunosRepository implements IAlunosRepository {
       const result = await this.repository.findOne({ where: { id } });
 
       if (!result) {
-        throw new Error('Alunos not found');
+        throw new Error('Cursos not found');
       }
 
       await this.repository.remove(result);
@@ -133,9 +128,9 @@ export class AlunosRepository implements IAlunosRepository {
   // // Count
   async count(search: string): Promise<{ count: number }> {
     try {
-      const count = await this.repository.createQueryBuilder('alunos')
+      const count = await this.repository.createQueryBuilder('cursos')
         .select('COUNT(*)', 'count')
-        .where('CONVERT(alunos.nome USING utf8) LIKE :search', { search: `%${search}%` })
+        .where('CONVERT(cursos.nome USING utf8) LIKE :search', { search: `%${search}%` })
         .getRawOne();
 
       return count;
