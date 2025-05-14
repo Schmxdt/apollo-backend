@@ -8,9 +8,11 @@ export class Cursos1747228368031 implements MigrationInterface {
                 name: 'cursos',
                 columns: [
                     {
-                        name: "id",
-                        type: "int",
+                        name: 'id',
+                        type: 'char',
+                        length: '36',
                         isPrimary: true,
+                        default: null,
                     },
                     {
                         name: 'nome',

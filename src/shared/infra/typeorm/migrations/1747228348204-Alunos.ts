@@ -8,9 +8,11 @@ export class Alunos1747228348204 implements MigrationInterface {
                 name: 'alunos',
                 columns: [
                     {
-                        name: "id",
-                        type: "int",
+                        name: 'id',
+                        type: 'char',
+                        length: '36',
                         isPrimary: true,
+                        default: null,
                     },
                     {
                         name: 'nome',
@@ -30,12 +32,13 @@ export class Alunos1747228348204 implements MigrationInterface {
                     {
                         name: 'created_at',
                         type: 'timestamp',
-                        default: 'now()',
+                        default: 'CURRENT_TIMESTAMP',
                     },
                     {
                         name: 'updated_at',
                         type: 'timestamp',
-                        default: 'now()',
+                        default: 'CURRENT_TIMESTAMP',
+                        onUpdate: 'CURRENT_TIMESTAMP',
                     },
                 ],
             })
