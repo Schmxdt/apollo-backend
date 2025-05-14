@@ -1,0 +1,22 @@
+services:
+  database: 
+    image: mysql:5.7
+    container_name: database-apollo
+    restart: always
+    ports: 
+      - 3306:3306
+    environment:
+      - MYSQL_ROOT_PASSWORD=admin
+      - MYSQL_DATABASE=db
+      - MYSQL_USER=db_user
+      - MYSQL_PASSWORD=admin
+    volumes:
+      - pgdata:/var/lib/mysql
+
+volumes:
+  pgdata:
+    driver: local
+
+networks:
+  default:
+    driver: bridge
