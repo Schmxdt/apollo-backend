@@ -1,15 +1,15 @@
 import { Column, Entity, PrimaryGeneratedColumn } from "typeorm";
 import { v4 as uuidv4 } from 'uuid';
 
-@Entity('cursos')
+@Entity('matriculas')
 export class Matriculas {
   @PrimaryGeneratedColumn('uuid')
   id: string = uuidv4();
 
-  @Column()
+  @Column({ name: 'aluno_id' })
   aluno_id?: string;
 
-  @Column()
+  @Column({ name: 'curso_id' })
   curso_id?: string;
 
   @Column({ name: 'data_matricula', type: 'timestamp', default: () => 'CURRENT_TIMESTAMP' })

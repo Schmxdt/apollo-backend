@@ -7,6 +7,6 @@ const router = Router()
 
 router.use('/alunos', alunosRoutes)
 router.use('/cursos', cursosRoutes)
-// router.use('/matriculas', matriculasRoutes)
+router.use('/matriculas', matriculasRoutes)
 
 export { router }
